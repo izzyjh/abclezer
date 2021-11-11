@@ -1,26 +1,60 @@
-@top Program { expression* }
+@top Program { (withline | emptyLine)* withoutline? }
 
-@skip { space | LineComment }
+@skip { space }
 
-expression {
-  Identifier |
-  String |
-  Boolean |
-  Application { "(" expression* ")" }
-}
+
+emptyLine { newline }
+withline { body newline }
+withoutline { body }
+newline { "\n" }
+
+body { Music | Metadata }
+
+Metadata { (Composer | Title | Key | Number | Tempo | TimeSignature | NoteDuration)}
+Music { (Barline? (measurewithoutbarline | (measure+ measurewithoutbarline?))) }
+
+
+Composer { "C:" Text }
+Title { "T:" Text }
+Key { "K:" Signature }
+Number { "X:" Numbers}
+Tempo { "Q:" Numbers}
+TimeSignature { "M:" Fractions }
+NoteDuration { "L:" Fractions }
+
+measurewithbarline { (Note | Rest)+ Barline }
+measurewithoutbarline { (Note | Rest)+ }
+Note { Sign? Pitch Octave? Duration? }
+Rest { RestMarker Duration?}
 
 @tokens {
-  Identifier { $[a-zA-Z_\-0-9]+ }
 
-  String { '"' (!["\\] | "\\" _)* '"' }
+  Sign { $[_^]+ | "="}
 
-  Boolean { "#t" | "#f" }
+  Pitch { $[a-gA-G] }
 
-  LineComment { ";" ![\n]* }
+  Octave { $[',]+ }
 
-  space { $[ \t\n\r]+ }
+  Duration { $[1-9] $[0-9]* ("/" $[1-9] $[0-9]+)? }
 
-  "(" ")"
+  RestMarker { $[zZxX] }
+
+  Barline { "|" | "|]" | "||" | "[|" | "|:" | ":|" | "::" }
+  
+  Text { words+ }
+
+  Signature { $[A-G] $[#b]? "m"? }
+
+  Numbers { $[0-9]+ }
+
+  Fractions { $[1-9] $[0-9]* "/" $[1-9] $[0-9]* }
+
+  words{ (char+) | (char+ space* char+) }
+
+  char { ![ \t\r\n]+ }
+
+  space { $[ \t\r]+ }
+
 }
 
 @detectDelim

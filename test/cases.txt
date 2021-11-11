@@ -1,41 +1,46 @@
-# Booleans
 
-#t
-#f
+# Metadata
 
-==>
+C: Michael Giacchino
 
-Program(Boolean, Boolean)
+T: Moving on
 
-# Identifiers
-
-one
-Two_Three
+K: A#m
 
 ==>
 
-Program(Identifier, Identifier)
+Program(Metadata(Composer(Text)),Metadata(Title(Text)),Metadata(Key(Signature)))
 
-# Strings
+# Note 
 
-"hello"
-"one\"\\two"
+a
 
-==>
+==> 
 
-Program(String, String)
+Program(Music(Note(Pitch)))
 
-# Applications
+# Note and Metadata
 
-(begin
-  (when #t
-    (print (concat "hello" " " "world")))
-  (print "DONE"))
+C: Michael Giacchino
 
-==>
+T: Moving on
 
-Program(Application(
-  Identifier,
-  Application(Identifier, Boolean, Application(
-    Identifier, Application(Identifier, String, String, String)))
-  Application(Identifier, String)))
+K: A#m
+
+M: 3/4
+
+a b c | c _D ^C | __b ^^f g :|
+f g e |
+
+C: Isabel Huey
+
+a b c |
+
+==> 
+
+Program(Metadata(Composer(Text)),Metadata(Title(Text)),Metadata(Key(Signature)),
+Metadata(TimeSignature(Fractions)),Music(Note(Pitch),Note(Pitch),Note(Pitch),
+Barline,Note(Pitch),Note(Sign,Pitch),Note(Sign,Pitch),Barline,Note(Sign,Pitch),Note(Sign,Pitch),
+Note(Pitch),Barline),Music(Note(Pitch),Note(Pitch),Note(Pitch),Barline),Metadata(Composer(Text)),
+Music(Note(Pitch),Note(Pitch),Note(Pitch),Barline))
+
