@@ -51,6 +51,9 @@ Note {Accidental? Pitch (Duration? Octave? | Octave? Duration?) }
 Gracenote { '{' Note+ '}'}
 Rest { 'z' Duration?}
 
+ShorthandDecoration { Staccato | IrishRoll | Fermata | Accent | LowerMordent | Coda | UpperMordent | Segno | Trill | Up-Bow | Down-Bow }
+
+
 Barline {
     '|'  |
     '||' |
@@ -98,8 +101,7 @@ Barline {
     Trill { 'T' }
     Up-Bow { 'u' }
     Down-Bow { 'v' }
-    ShorthandDecoration { Staccato | IrishRoll | Fermata | Accent | LowerMordent | Coda | UpperMordent | Segno | Trill | Up-Bow | Down-Bow }
-
+    
     SlurStart { '(' }
     SlurEnd { ')' }
 
