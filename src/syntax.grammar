@@ -1,60 +1,110 @@
-@top Program { (withline | emptyLine)* withoutline? }
+@precedence { dotted @left }
+@top Program { (lineWithNewline | emptyLine)* lineWithoutNewline?  }
 
-@skip { space }
-
-
+lineWithNewline { expression newline }
+lineWithoutNewline { expression }
 emptyLine { newline }
-withline { body newline }
-withoutline { body }
-newline { "\n" }
 
-body { Music | Metadata }
+expression { music | Metadata }
 
-Metadata { (Composer | Title | Key | Number | Tempo | TimeSignature | NoteDuration)}
-Music { (Barline? (measurewithoutbarline | (measure+ measurewithoutbarline?))) }
-
-
-Composer { "C:" Text }
-Title { "T:" Text }
-Key { "K:" Signature }
-Number { "X:" Numbers}
-Tempo { "Q:" Numbers}
-TimeSignature { "M:" Fractions }
-NoteDuration { "L:" Fractions }
-
-measurewithbarline { (Note | Rest)+ Barline }
-measurewithoutbarline { (Note | Rest)+ }
-Note { Sign? Pitch Octave? Duration? }
-Rest { RestMarker Duration?}
-
-@tokens {
-
-  Sign { $[_^]+ | "="}
-
-  Pitch { $[a-gA-G] }
-
-  Octave { $[',]+ }
-
-  Duration { $[1-9] $[0-9]* ("/" $[1-9] $[0-9]+)? }
-
-  RestMarker { $[zZxX] }
-
-  Barline { "|" | "|]" | "||" | "[|" | "|:" | ":|" | "::" }
-  
-  Text { words+ }
-
-  Signature { $[A-G] $[#b]? "m"? }
-
-  Numbers { $[0-9]+ }
-
-  Fractions { $[1-9] $[0-9]* "/" $[1-9] $[0-9]* }
-
-  words{ (char+) | (char+ space* char+) }
-
-  char { ![ \t\r\n]+ }
-
-  space { $[ \t\r]+ }
-
+Metadata {
+    Book |
+    Composer |
+    Discography |
+    FileURL |
+    KeySignature |
+    NoteLength |
+    Rhythm |
+    Source |
+    Tempo |
+    TimeSignature |
+    Title |
+    TuneNumber |
+    Words |
+    Transcription
 }
 
-@detectDelim
+Book {"B:" text}
+Composer { "C:" text }
+Discography { "D:" text }
+FileURL { "F:" text}
+KeySignature { "K:" key }
+NoteLength { "L:" number }
+Rhythm { "R:" text}
+Source { "S:" text}
+Tempo { "Q:" string? (frac (frac)* '=')? int string? }
+TimeSignature { "M:" (number | 'C') }
+Title { "T:" text }
+TuneNumber { "X:" int }
+Words { ("W:" | "w:") text}
+Transcription { "Z:" text}
+
+music { Barline | Barline? pattern+ }
+pattern { SlurStart | SlurEnd | DottedRhythm | event | event Barline | SlurEnd Barline }
+
+DottedRhythm { event !dotted Dot event }
+
+event { ( ShorthandDecoration? Gracenote? Note) | Rest | (Gracenote? Chord) }
+
+Chord { "[" Note+ "]" }
+Note {Accidental? Pitch (Duration? Octave? | Octave? Duration?) }
+Gracenote { '{' Note+ '}'}
+Rest { 'z' Duration?}
+
+Barline {
+    '|'  |
+    '||' |
+    ':|' |
+    '|:' |
+    '[|' |
+    '|]' |
+    ':||:' |
+    ':|:' |
+    '::' 
+}
+
+@tokens {
+    char { ![ \t\n\r%] }
+
+    string { '"' (char | whitespace)* '"' }
+    text { char+ | char+ (char | whitespace)+ char+ }
+
+    Comment { '%' ![\n\r]* }
+
+    int { '0' | $[1-9] std.digit* }
+    frac {$[1-9] std.digit* whitespace* '/' whitespace*  $[1-9] std.digit* }
+    durationfrac { frac | ('/'+ | ('/' int))}
+    number { int | frac}
+    durationnumber { int | durationfrac}
+    @precedence {frac, int}
+
+    pitchLetter { $[abcdefgABCDEFG] }
+    key { pitchLetter ('b' | '#')? ('m')? }
+
+    Pitch { pitchLetter }
+    Accidental { '_'+ | '=' | '^'+ }
+    Octave { $[,']+ }
+    Duration { durationnumber }
+    Dot { '<'+ | '>'+ }
+
+    Staccato { '.' }
+    IrishRoll { '~' }
+    Fermata { 'H' }
+    Accent { 'L' }
+    LowerMordent { 'M' }
+    Coda { 'O' }
+    UpperMordent { 'P' }
+    Segno { 'S' }
+    Trill { 'T' }
+    Up-Bow { 'u' }
+    Down-Bow { 'v' }
+    ShorthandDecoration { Staccato | IrishRoll | Fermata | Accent | LowerMordent | Coda | UpperMordent | Segno | Trill | Up-Bow | Down-Bow }
+
+    SlurStart { '(' }
+    SlurEnd { ')' }
+
+    newline { $[\n\r]+ }
+    whitespace { $[ \t]+ }
+}
+
+@skip {whitespace | Comment}

@@ -1,46 +1,202 @@
-
 # Metadata
 
-C: Michael Giacchino
-
-T: Moving on
-
-K: A#m
+T: Hello ... Song
 
 ==>
 
-Program(Metadata(Composer(Text)),Metadata(Title(Text)),Metadata(Key(Signature)))
+Program(Metadata(Title))
 
-# Note 
+# Metadata + Comments
 
-a
+C: Me
+X: 1
+T: Great Musics % Test Test
+L: 1/4
+K: C#
+M: 4/4
+% Various Tempos
+Q: 120
+Q: 1/2 1/4 = 120
+Q: "Allegro" 120
+% K: C#
 
-==> 
+==>
 
-Program(Music(Note(Pitch)))
+Program(
+    Metadata(Composer),
+    Metadata(TuneNumber),
+    Metadata(Title), Comment,
+    Metadata(NoteLength),
+    Metadata(KeySignature),
+    Metadata(TimeSignature),
+    Comment,
+    Metadata(Tempo),
+    Metadata(Tempo),
+    Metadata(Tempo),
+    Comment
+)
 
-# Note and Metadata
+# New Line Metadata Test - Only a Title!
 
-C: Michael Giacchino
+T: Hello $Money Song Q: 120
 
-T: Moving on
+==>
 
-K: A#m
+Program(Metadata(Title))
 
-M: 3/4
+# Tricky Metadata
+M: C
+C
 
-a b c | c _D ^C | __b ^^f g :|
-f g e |
+==>
 
-C: Isabel Huey
+Program(Metadata(TimeSignature), Note(Pitch))
 
-a b c |
+# Simple Notes
 
-==> 
+ABCD abcz
 
-Program(Metadata(Composer(Text)),Metadata(Title(Text)),Metadata(Key(Signature)),
-Metadata(TimeSignature(Fractions)),Music(Note(Pitch),Note(Pitch),Note(Pitch),
-Barline,Note(Pitch),Note(Sign,Pitch),Note(Sign,Pitch),Barline,Note(Sign,Pitch),Note(Sign,Pitch),
-Note(Pitch),Barline),Music(Note(Pitch),Note(Pitch),Note(Pitch),Barline),Metadata(Composer(Text)),
-Music(Note(Pitch),Note(Pitch),Note(Pitch),Barline))
+==>
+
+Program(
+    Note(Pitch), Note(Pitch), Note(Pitch), Note(Pitch),
+    Note(Pitch), Note(Pitch), Note(Pitch), Rest,
+)
+
+# Mixed Note Types and Spaces
+
+A2_B2' ^c,1/2
+
+==>
+
+Program(
+    Note(Pitch,Duration),
+    Note(Accidental,Pitch,Duration,Octave),
+    Note(Accidental,Pitch,Octave,Duration)
+)
+
+# Single Measure, Single Note, Comment
+
+|
+A % ABC
+
+==>
+
+Program(
+    Barline,
+    Note(Pitch), Comment
+)
+
+# Shorthand Duration
+
+A/
+A//
+A/2
+
+==>
+
+Program(Note(Pitch,Duration), Note(Pitch,Duration), Note(Pitch,Duration))
+
+# Shorthand Decoration 
+
+C: Isabel
+T: Title
+.a 
+~b 
+HC
+Ld
+Me
+OF
+Pg 
+SA 
+TB
+uc
+vD
+
+
+==>
+
+Program(Metadata(Composer),Metadata(Title),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch))
+
+# Gracenote
+
+{abc}C
+==>
+
+Program(Gracenote(Note(Pitch),Note(Pitch),Note(Pitch)),Note(Pitch))
+
+# Chord
+
+[ABCD]
+ABCD
+
+==>
+
+Program(
+    Chord(Note(Pitch), Note(Pitch), Note(Pitch), Note(Pitch)),
+    Note(Pitch), Note(Pitch), Note(Pitch), Note(Pitch)
+)
+
+# Music Metadata Interspersed
+
+T: Start
+ABC
+K: Bb
+_a
+b % Comment
+c
+
+==>
+
+Program(
+    Metadata(Title),
+    Note(Pitch), Note(Pitch), Note(Pitch),
+    Metadata(KeySignature),
+    Note(Accidental, Pitch),
+    Note(Pitch), Comment,
+    Note(Pitch),
+)
+
+# All things
+
+X: 1
+T: 1. The Name is Hope
+L: 1/4
+K: C
+M: 3 / 4
+C: Me
+Q: "very fast" 200
+_AB(C | d,E)G [f3Ac,] |]
+
+K: Bb
+A(b<c % Comment
+
+==>
+
+Program(
+    Metadata(TuneNumber),
+    Metadata(Title),
+    Metadata(NoteLength),
+    Metadata(KeySignature),
+    Metadata(TimeSignature),
+    Metadata(Composer),
+    Metadata(Tempo),
+    Note(Accidental,Pitch),
+    Note(Pitch), SlurStart,
+    Note(Pitch),
+    Barline,
+    Note(Pitch,Octave),
+    Note(Pitch),
+    SlurEnd,
+    Note(Pitch),
+    Chord(Note(Pitch,Duration),
+    Note(Pitch),
+    Note(Pitch,Octave)),
+    Barline,
+    Metadata(KeySignature),
+    Note(Pitch),
+    SlurStart,
+    DottedRhythm(Note(Pitch),Dot,Note(Pitch)),
+    Comment
+)
 
