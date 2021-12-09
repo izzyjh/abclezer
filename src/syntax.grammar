@@ -44,7 +44,7 @@ pattern { SlurStart | SlurEnd | DottedRhythm | event | event Barline | SlurEnd B
 
 DottedRhythm { event !dotted Dot event }
 
-event { ( ShorthandDecoration? Gracenote? (Note)) | Rest | (Gracenote? Chord) }
+event { ( ShorthandDecoration? Gracenote? Note) | Rest | (Gracenote? Chord) }
 
 Chord { "[" Note+ "]" }
 Note {Accidental? Pitch (Duration? Octave? | Octave? Duration?) }
@@ -73,7 +73,7 @@ Barline {
 
     int { '0' | $[1-9] std.digit* }
     frac {$[1-9] std.digit* whitespace* '/' whitespace*  $[1-9] std.digit* }
-    durationfrac { frac | ('/'+ int?)}
+    durationfrac { frac | ('/'+ | ('/' int))}
     number { int | frac}
     durationnumber { int | durationfrac}
     @precedence {frac, int}
