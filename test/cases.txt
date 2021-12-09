@@ -116,8 +116,7 @@ vD
 
 ==>
 
-Program(Metadata(Composer),Metadata(Title),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch),ShorthandDecoration,Note(Pitch))
-
+Program(Metadata(Composer),Metadata(Title),ShorthandDecoration(Staccato),Note(Pitch),ShorthandDecoration(IrishRoll),Note(Pitch),ShorthandDecoration(Fermata),Note(Pitch),ShorthandDecoration(Accent),Note(Pitch),ShorthandDecoration(LowerMordent),Note(Pitch),ShorthandDecoration(Coda),Note(Pitch),ShorthandDecoration(UpperMordent),Note(Pitch),ShorthandDecoration(Segno),Note(Pitch),ShorthandDecoration(Trill),Note(Pitch),ShorthandDecoration("Up-Bow"),Note(Pitch),ShorthandDecoration("Down-Bow"),Note(Pitch))
 # Gracenote
 
 {abc}C
